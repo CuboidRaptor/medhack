@@ -14,6 +14,10 @@ document.getElementById('add-medication-btn').addEventListener('click', function
     const extraInstructions = document.getElementById('extra-instructions').value;
     const reminderTime = document.getElementById('reminder-time').value;
 
+    ["medication-name", "dose", "frequency", "duration", "extra-instructions", "reminder-time"].forEach(
+        (element) => {document.getElementById(element).value = "";}
+    )
+
     if (!medicationName || !dose || !frequency || !duration || !reminderTime) {
         alert("Please fill in all required fields.");
         return;
