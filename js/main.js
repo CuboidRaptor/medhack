@@ -15,12 +15,15 @@ console.log(medications);
 
 // Handle adding medication
 document.getElementById("add-medication-btn").addEventListener("click", function() {
-    const medicationName = document.getElementById("medication-name").value;
-    const dose = document.getElementById("dose").value;
-    const frequency = document.getElementById("frequency").value;
-    const duration = document.getElementById("duration").value;
-    const extraInstructions = document.getElementById("extra-instructions").value;
-    const reminderTime = document.getElementById("reminder-time").value;
+    var medicationName = document.getElementById("medication-name").value;
+    var dose = document.getElementById("dose").value;
+    var frequency = document.getElementById("frequency").value;
+    var duration = document.getElementById("duration").value;
+    var extraInstructions = document.getElementById("extra-instructions").value;
+    var [hours, minutes] = document.getElementById("reminder-time").value.split(":");
+    var reminderDate = new Date();
+    reminderDate.setHours(hours, minutes, 0, 0);
+    var reminderTime = reminderDate.getTime();
 
     ["medication-name", "dose", "frequency", "duration", "extra-instructions", "reminder-time"].forEach(
         (element) => {document.getElementById(element).value = "";}
@@ -82,13 +85,8 @@ function medStore() {
 
 // Set reminders (5 minutes before reminder time)
 function setReminder(medication) {
-    const reminderTime = medication.reminderTime;
-    const [hours, minutes] = reminderTime.split(":");
-    const reminderDate = new Date();
-    reminderDate.setHours(hours, minutes, 0, 0);
-    
     // Set reminder for 5 minutes before
-    const reminderTimeInMillis = reminderDate.getTime() - 5 * 60 * 1000;
+    var reminderTimeInMillis = medication.reminderDate - 5 * 60 * 1000;
 
     // Create a notification
     if (reminderTimeInMillis - Date.now() < 0) {
