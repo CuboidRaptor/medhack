@@ -76,12 +76,16 @@ function setReminder(medication) {
     const reminderTimeInMillis = reminderDate.getTime() - 5 * 60 * 1000;
 
     // Create a notification
-    setTimeout(() => {
-        if (Notification.permission === "granted") {
-            new Notification(`Reminder: Time to take your medication: ${medication.name}`, {
-                body: `${medication.dose} - ${medication.instructions}`,
-                icon: 'https://via.placeholder.com/150'
-            });
-        }
-    }, reminderTimeInMillis - Date.now());
+    if (reminderTimeInMillis - Date.now() < 0) {
+        console.log("time in past, skipped");
+    }
+    else {
+        setTimeout(() => {
+            if (Notification.permission === "granted") {
+                new Notification(`Reminder: Time to take your medication: ${medication.name}`, {
+                    body: `${medication.dose} - ${medication.instructions}`
+                });
+            }
+        }, reminderTimeInMillis - Date.now());
+    }
 }
