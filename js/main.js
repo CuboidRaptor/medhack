@@ -102,6 +102,7 @@ function setReminder(medication) {
         }, reminderTimeInMillis - Date.now());
 
         medication.tid = tID;
+        //medication.reminderTime += 
         medStore();
     }
 }
