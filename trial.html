@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .dashboard-container {
+            width: 80%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .medication-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .medication-box:hover {
+            background-color: #f1f1f1;
+        }
+        .medication-details {
+            display: none;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+        }
+        .close-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h1>Medication Tracker Dashboard</h1>
+
+        <!-- Medication 1 -->
+        <div class="medication-box" onclick="toggleDetails('med1-details')">
+            <h3>Medication 1: Aspirin</h3>
+            <p>Take 1 tablet every morning at 8 AM.</p>
+        </div>
+        <div id="med1-details" class="medication-details">
+            <p><strong>Instructions:</strong> Take one 500mg tablet with food. Avoid taking on an empty stomach.</p>
+            <button class="close-btn" onclick="toggleDetails('med1-details')">Close</button>
+        </div>
+
+        <!-- Medication 2 -->
+        <div class="medication-box" onclick="toggleDetails('med2-details')">
+            <h3>Medication 2: Metformin</h3>
+            <p>Take 1 tablet every night at 9 PM.</p>
+        </div>
+        <div id="med2-details" class="medication-details">
+            <p><strong>Instructions:</strong> Take one 500mg tablet with a glass of water.</p>
+            <button class="close-btn" onclick="toggleDetails('med2-details')">Close</button>
+        </div>
+
+        <!-- Medication 3 -->
+        <div class="medication-box" onclick="toggleDetails('med3-details')">
+            <h3>Medication 3: Lipitor</h3>
+            <p>Take 1 tablet daily at 7 AM.</p>
+        </div>
+        <div id="med3-details" class="medication-details">
+            <p><strong>Instructions:</strong> Take one 10mg tablet with or without food.</p>
+            <button class="close-btn" onclick="toggleDetails('med3-details')">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(medicationId) {
+            const details = document.getElementById(medicationId);
+            // Toggle visibility of the details box
+            details.style.display = (details.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+
+</body>
+</html>
