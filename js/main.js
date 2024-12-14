@@ -3,16 +3,28 @@ if (Notification.permission !== "granted") {
     Notification.requestPermission();
 }
 
+var db = new Dexie("MedicationReminderDB");
+
+db.version(1).stores({
+    meds: `
+        medication-name,
+        dose,
+        frequency,
+        duration,
+        extra-instructions,
+        reminder-time`,
+})
+
 const medications = [];
 
 // Handle adding medication
-document.getElementById('add-medication-btn').addEventListener('click', function() {
-    const medicationName = document.getElementById('medication-name').value;
-    const dose = document.getElementById('dose').value;
-    const frequency = document.getElementById('frequency').value;
-    const duration = document.getElementById('duration').value;
-    const extraInstructions = document.getElementById('extra-instructions').value;
-    const reminderTime = document.getElementById('reminder-time').value;
+document.getElementById("add-medication-btn").addEventListener("click", function() {
+    const medicationName = document.getElementById("medication-name").value;
+    const dose = document.getElementById("dose").value;
+    const frequency = document.getElementById("frequency").value;
+    const duration = document.getElementById("duration").value;
+    const extraInstructions = document.getElementById("extra-instructions").value;
+    const reminderTime = document.getElementById("reminder-time").value;
 
     ["medication-name", "dose", "frequency", "duration", "extra-instructions", "reminder-time"].forEach(
         (element) => {document.getElementById(element).value = "";}
@@ -35,23 +47,24 @@ document.getElementById('add-medication-btn').addEventListener('click', function
     medications.push(medication);
     displayMedications();
     setReminder(medication);
+    db.meds.put(medication);
 });
 
 // Display the medications
 function displayMedications() {
-    const medicationsList = document.getElementById('medications-list');
-    medicationsList.innerHTML = '';
+    const medicationsList = document.getElementById("medications-list");
+    medicationsList.innerHTML = "";
 
     medications.forEach((med, index) => {
-        const medBox = document.createElement('div');
-        medBox.classList.add('medication');
-        medBox.classList.add('medication-box');
+        const medBox = document.createElement("div");
+        medBox.classList.add("medication");
+        medBox.classList.add("medication-box");
         medBox.innerHTML = `
             <strong>${med.name}</strong> <br>
             Dosage: ${med.dose} <br>
             Frequency: ${med.frequency} <br>
             Duration: ${med.duration} <br>
-            Instructions: ${med.instructions || 'None'} <br>
+            Instructions: ${med.instructions || "None"} <br>
             Reminder Time: ${med.reminderTime} <br>
             <button class="btn" onclick="removeMedication(${index})">Remove</button>
         `;
@@ -68,7 +81,7 @@ function removeMedication(index) {
 // Set reminders (5 minutes before reminder time)
 function setReminder(medication) {
     const reminderTime = medication.reminderTime;
-    const [hours, minutes] = reminderTime.split(':');
+    const [hours, minutes] = reminderTime.split(":");
     const reminderDate = new Date();
     reminderDate.setHours(hours, minutes, 0, 0);
     
