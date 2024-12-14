@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/modern-normalize.css">
+        <link rel="stylesheet" type="text/css" href="css/try.css">
+        <title>Medication Reminder</title>
+    </head>
+    <body>
+
+        <div class="container">
+            <h1>Medication Reminder</h1>
+
+            <div>
+                <h3>Enter Medication Details</h3>
+                <label for="medication-name">Medication Name:</label>
+                <input type="text" id="medication-name" placeholder="Enter medication name" required>
+
+                <label for="dose">Dosage:</label>
+                <input type="text" id="dose" placeholder="Enter dosage" required>
+
+
+                <label for="frequency">How often do you take it?</label>
+                <input type="text" id="frequency" placeholder="e.g. every day, twice a day, etc." required>
+            <label for="frequency">How often do you take it?</label>
+            <input type="text" id="frequency" placeholder="type 1 if you take it once a day, 2 if twice, 1/2 if once every 2 days" required>
+
+
+                <label for="duration">For how long?</label>
+                <input type="text" id="duration" placeholder="Type how many days you need to take this medication for" required>
+
+                <label for="extra-instructions">Extra Instructions (optional):</label>
+                <input type="text" id="extra-instructions" placeholder="e.g. Take with food">
+
+                <label for="reminder-time">Reminder Time:</label>
+                <input type="time" id="reminder-time" required>
+
+                <button class="btn" id="add-medication-btn">Add Medication</button>
+            </div>
+
+            <div class="medications">
+                <h3>Your Medications</h3>
+                <div id="medications-list"></div>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+        <script src="js/try.js"></script>
+
+    </body>
+</html>
