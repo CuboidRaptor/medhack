@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .medication-box {
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .medications {
+            margin-top: 30px;
+        }
+        .medications .medication {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Medication Reminder</h1>
+
+        <div>
+            <h3>Enter Medication Details</h3>
+            <label for="medication-name">Medication Name:</label>
+            <input type="text" id="medication-name" placeholder="Enter medication name" required>
+
+            <label for="dose">Dosage:</label>
+            <input type="text" id="dose" placeholder="Enter dosage" required>
+
+            <label for="frequency">How often do you take it?</label>
+            <input type="text" id="frequency" placeholder="e.g., every day, twice a day, etc." required>
+
+            <label for="duration">For how long?</label>
+            <input type="text" id="duration" placeholder="e.g., 10 days, 3 months" required>
+
+            <label for="extra-instructions">Extra Instructions (optional):</label>
+            <input type="text" id="extra-instructions" placeholder="e.g., Take with food">
+
+            <label for="reminder-time">Reminder Time:</label>
+            <input type="time" id="reminder-time" required>
+
+            <button class="btn" id="add-medication-btn">Add Medication</button>
+        </div>
+
+        <div class="medications">
+            <h3>Your Medications</h3>
+            <div id="medications-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Check for Notification permission
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+
+        const medications = [];
+
+        // Handle adding medication
+        document.getElementById('add-medication-btn').addEventListener('click', function() {
+            const medicationName = document.getElementById('medication-name').value;
+            const dose = document.getElementById('dose').value;
+            const frequency = document.getElementById('frequency').value;
+            const duration = document.getElementById('duration').value;
+            const extraInstructions = document.getElementById('extra-instructions').value;
+            const reminderTime = document.getElementById('reminder-time').value;
+
+            if (!medicationName || !dose || !frequency || !duration || !reminderTime) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            const medication = {
+                name: medicationName,
+                dose: dose,
+                frequency: frequency,
+                duration: duration,
+                instructions: extraInstructions,
+                reminderTime: reminderTime,
+            };
+
+            medications.push(medication);
+            displayMedications();
+            setReminder(medication);
+        });
+
+        // Display the medications
+        function displayMedications() {
+            const medicationsList = document.getElementById('medications-list');
+            medicationsList.innerHTML = '';
+
+            medications.forEach((med, index) => {
+                const medBox = document.createElement('div');
+                medBox.classList.add('medication');
+                medBox.classList.add('medication-box');
+                medBox.innerHTML = `
+                    <strong>${med.name}</strong> <br>
+                    Dosage: ${med.dose} <br>
+                    Frequency: ${med.frequency} <br>
+                    Duration: ${med.duration} <br>
+                    Instructions: ${med.instructions || 'None'} <br>
+                    Reminder Time: ${med.reminderTime} <br>
+                    <button class="btn" onclick="removeMedication(${index})">Remove</button>
+                `;
+                medicationsList.appendChild(medBox);
+            });
+        }
+
+        // Remove medication
+        function removeMedication(index) {
+            medications.splice(index, 1);
+            displayMedications();
+        }
+
+        // Set reminders (5 minutes before reminder time)
+        function setReminder(medication) {
+            const reminderTime = medication.reminderTime;
+            const [hours, minutes] = reminderTime.split(':');
+            const reminderDate = new Date();
+            reminderDate.setHours(hours, minutes, 0, 0);
+            
+            // Set reminder for 5 minutes before
+            const reminderTimeInMillis = reminderDate.getTime() - 5 * 60 * 1000;
+
+            // Create a notification
+            setTimeout(() => {
+                if (Notification.permission === "granted") {
+                    new Notification(`Reminder: Time to take your medication: ${medication.name}`, {
+                        body: `${medication.dose} - ${medication.instructions}`,
+                        icon: 'https://via.placeholder.com/150'
+                    });
+                }
+            }, reminderTimeInMillis - Date.now());
+        }
+    </script>
+
+</body>
+</html>
