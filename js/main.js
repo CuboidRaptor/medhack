@@ -43,7 +43,6 @@ document.getElementById("add-medication-btn").addEventListener("click", function
     medications.push(medication);
     displayMedications();
     setReminder(medication);
-    localStorage.setItem("data", JSON.stringify(medications));
 });
 
 // Display the medications
@@ -66,6 +65,9 @@ function displayMedications() {
         `;
         medicationsList.appendChild(medBox);
     });
+
+    // store medications
+    localStorage.setItem("data", JSON.stringify(medications));
 }
 
 // Remove medication
