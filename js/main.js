@@ -43,6 +43,7 @@ document.getElementById("add-medication-btn").addEventListener("click", function
     medications.push(medication);
     displayMedications();
     setReminder(medication);
+    medStore();
 });
 
 // Display the medications
@@ -65,15 +66,18 @@ function displayMedications() {
         `;
         medicationsList.appendChild(medBox);
     });
-
-    // store medications
-    localStorage.setItem("data", JSON.stringify(medications));
 }
 
 // Remove medication
 function removeMedication(index) {
+    clearTimeout(medications[index].tid);
     medications.splice(index, 1);
     displayMedications();
+    medStore();
+}
+
+function medStore() {
+    localStorage.setItem("data", JSON.stringify(medications));
 }
 
 // Set reminders (5 minutes before reminder time)
@@ -91,12 +95,15 @@ function setReminder(medication) {
         console.log("time in past, skipped");
     }
     else {
-        setTimeout(() => {
+        tID = setTimeout(() => {
             if (Notification.permission === "granted") {
                 new Notification(`Reminder: Time to take your medication: ${medication.name}`, {
                     body: `${medication.dose} - ${medication.instructions}`
                 });
             }
         }, reminderTimeInMillis - Date.now());
+
+        medication.tid = tID;
+        medStore();
     }
 }
