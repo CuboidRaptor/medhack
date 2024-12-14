@@ -3,19 +3,15 @@ if (Notification.permission !== "granted") {
     Notification.requestPermission();
 }
 
-var db = new Dexie("MedicationReminderDB");
-
-db.version(1).stores({
-    meds: `
-        medication-name,
-        dose,
-        frequency,
-        duration,
-        extra-instructions,
-        reminder-time`,
-})
-
-const medications = [];
+var medications;
+if (localStorage.getItem("data") === null) {
+    medications = [];
+}
+else {
+    medications = JSON.parse(localStorage.getItem("data"));
+}
+displayMedications();
+console.log(medications);
 
 // Handle adding medication
 document.getElementById("add-medication-btn").addEventListener("click", function() {
@@ -47,7 +43,7 @@ document.getElementById("add-medication-btn").addEventListener("click", function
     medications.push(medication);
     displayMedications();
     setReminder(medication);
-    db.meds.put(medication);
+    localStorage.setItem("data", JSON.stringify(medications));
 });
 
 // Display the medications
