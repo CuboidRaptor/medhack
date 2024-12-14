@@ -1,0 +1,8 @@
+@font-face {
+  font-family: TinosReg;
+  src: url("../font/Tinos-Regular.ttf");
+}
+
+.tinos {
+  font-family: TinosReg;
+}
